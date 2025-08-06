@@ -1,10 +1,6 @@
 import { App } from "cdktf";
-import { CloudResumeInfraStack } from "./src/cloud-resume";
-import { TestInfraStack } from "./src/test.infra";
+import { CloudResumeInfraStack } from "./src/cloud-resume-infra-stack";
 
-const app = new App({ skipValidation: true });
-
-new TestInfraStack(app, "test-infra");
+const app = new App();
 new CloudResumeInfraStack(app, "resume-infra");
-
 app.synth();
