@@ -1,11 +1,14 @@
 {
-  "language": "typescript",
-  "app": "npx ts-node main.ts",
-  "projectId": "1f5330de-84d2-4014-b6c3-e11572f9c3e6",
+  "language": "csharp",
+  "app": "dotnet run -p MyTerraformStack.csproj",
+  "projectId": "58c49864-6699-4587-9ec9-134eb58f4b9b",
   "sendCrashReports": "false",
-  "terraformProviders": [],
+  "terraformProviders": [
+    "hashicorp/azurerm@latest"
+  ],
   "terraformModules": [],
   "context": {
-
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
   }
 }

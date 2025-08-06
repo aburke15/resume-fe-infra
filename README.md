@@ -1,12 +1,12 @@
-# Cloud Resume Infrastructure
+# Cloud Resume Infrastructure (Azure)
 
-This repository contains the infrastructure code for the Cloud Resume project. It provisions and manages all cloud resources required to host and operate the resume application.
+This repository contains the infrastructure code for the Cloud Resume project, using **Azure** as the cloud provider and [CDK for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf) for Infrastructure as Code.
 
 ## Features
 
-- Infrastructure as Code (IaC) using [AWS CDK for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf)
+- Infrastructure as Code (IaC) with CDK for Terraform (CDKTF)
 - Automated deployment pipelines
-- Secure and scalable cloud architecture
+- Secure, scalable, and cost-effective Azure architecture
 - Version-controlled and reproducible environments
 
 ## Project Structure
@@ -14,12 +14,14 @@ This repository contains the infrastructure code for the Cloud Resume project. I
 ```
 resume-infra/
 ├── cdktf.out/         # CDKTF generated output
-├── src/               # CDKTF stack definitions and constructs
+├── imports/           # Generated provider bindings
 ├── scripts/           # Helper scripts
 ├── .env.example       # Example environment variables
 ├── cdktf.json         # CDKTF project configuration
-├── package.json       # Node.js project manifest
-├── tsconfig.json      # TypeScript configuration
+├── main.py            # Main CDKTF stack definition
+├── main-test.py       # Test file for the infrastructure
+├── Pipfile            # Python dependencies
+├── Pipfile.lock       # Locked Python dependencies
 └── README.md
 ```
 
@@ -34,19 +36,40 @@ resume-infra/
 
 2. **Install prerequisites:**
 
-   - [Node.js](https://nodejs.org/)
-   - [AWS CLI](https://aws.amazon.com/cli/)
+   - [Python 3.7+](https://www.python.org/downloads/)
+   - [Pipenv](https://pipenv.pypa.io/en/latest/) or [pip](https://pip.pypa.io/en/stable/)
+   - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
    - [CDK for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf)
 
-3. **Install dependencies:**
+3. **Install Python dependencies:**
+
+   Using Pipenv (recommended):
 
    ```bash
-   npm install
+   pipenv install
+   pipenv shell
    ```
 
-4. **Configure your cloud credentials.**
+   Or using pip:
 
-5. **Deploy the infrastructure:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Authenticate with Azure:**
+
+   Ensure you are logged in to Azure and have the necessary permissions:
+
+   ```bash
+   az login
+   ```
+
+5. **Configure environment variables:**
+
+   Copy `.env.example` to `.env` and update values as needed for your Azure subscription and resources.
+
+6. **Deploy the infrastructure:**
+
    ```bash
    cdktf synth
    cdktf deploy
