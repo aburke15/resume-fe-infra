@@ -18,10 +18,11 @@ resume-infra/
 ├── scripts/           # Helper scripts
 ├── .env.example       # Example environment variables
 ├── cdktf.json         # CDKTF project configuration
-├── main.py            # Main CDKTF stack definition
-├── main-test.py       # Test file for the infrastructure
-├── Pipfile            # Python dependencies
-├── Pipfile.lock       # Locked Python dependencies
+├── main.cs            # Main CDKTF stack definition
+├── Program.cs         # Entry point for the application
+├── *.csproj           # C# project file
+├── obj/               # Build output directory
+├── bin/               # Compiled binaries
 └── README.md
 ```
 
@@ -36,24 +37,14 @@ resume-infra/
 
 2. **Install prerequisites:**
 
-   - [Python 3.7+](https://www.python.org/downloads/)
-   - [Pipenv](https://pipenv.pypa.io/en/latest/) or [pip](https://pip.pypa.io/en/stable/)
+   - [.NET 6.0+](https://dotnet.microsoft.com/en-us/download)
    - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
    - [CDK for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf)
 
-3. **Install Python dependencies:**
-
-   Using Pipenv (recommended):
+3. **Install .NET dependencies:**
 
    ```bash
-   pipenv install
-   pipenv shell
-   ```
-
-   Or using pip:
-
-   ```bash
-   pip install -r requirements.txt
+   dotnet restore
    ```
 
 4. **Authenticate with Azure:**
@@ -68,12 +59,22 @@ resume-infra/
 
    Copy `.env.example` to `.env` and update values as needed for your Azure subscription and resources.
 
-6. **Deploy the infrastructure:**
+6. **Build and deploy the infrastructure:**
 
    ```bash
+   dotnet build
    cdktf synth
    cdktf deploy
    ```
+
+## Development
+
+- **Build the project:** `dotnet build`
+- **Run tests:** `dotnet test`
+- **Synthesize Terraform:** `cdktf synth`
+- **Plan changes:** `cdktf diff`
+- **Deploy:** `cdktf deploy`
+- **Destroy:** `cdktf destroy`
 
 ## Contributing
 
