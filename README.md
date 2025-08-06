@@ -2,6 +2,10 @@
 
 This repository contains the infrastructure code for the Cloud Resume project, using **Azure** as the cloud provider and [CDK for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf) with TypeScript for Infrastructure as Code.
 
+## Links to the Cloud Resume Project
+
+- [My Resume](https://res.aburke.tech)
+
 ## Features
 
 - Infrastructure as Code (IaC) with CDK for Terraform (CDKTF)
@@ -74,6 +78,7 @@ resume-infra/
    ```
 
    Edit `.env`:
+
    ```bash
    ARM_SUBSCRIPTION_ID=your-azure-subscription-id
    ```
@@ -120,19 +125,19 @@ resume-infra/
 
 ## Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run get` | Import/update Terraform providers and modules |
-| `npm run compile` | Compile TypeScript to JavaScript |
-| `npm run watch` | Watch for changes and compile in background |
-| `npm run build` | Build the project |
-| `npm test` | Run tests |
-| `npm run lint` | Lint TypeScript code |
-| `npm run format` | Format code with Prettier |
-| `cdktf synth` | Synthesize Terraform configuration |
-| `cdktf diff` | Show deployment plan |
-| `cdktf deploy` | Deploy infrastructure |
-| `cdktf destroy` | Destroy infrastructure |
+| Command           | Description                                   |
+| ----------------- | --------------------------------------------- |
+| `npm run get`     | Import/update Terraform providers and modules |
+| `npm run compile` | Compile TypeScript to JavaScript              |
+| `npm run watch`   | Watch for changes and compile in background   |
+| `npm run build`   | Build the project                             |
+| `npm test`        | Run tests                                     |
+| `npm run lint`    | Lint TypeScript code                          |
+| `npm run format`  | Format code with Prettier                     |
+| `cdktf synth`     | Synthesize Terraform configuration            |
+| `cdktf diff`      | Show deployment plan                          |
+| `cdktf deploy`    | Deploy infrastructure                         |
+| `cdktf destroy`   | Destroy infrastructure                        |
 
 ## Architecture
 
@@ -145,14 +150,14 @@ This project deploys the following Azure resources:
 
 ## Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `ARM_SUBSCRIPTION_ID` | Azure subscription ID | Yes |
-| `ARM_CLIENT_ID` | Azure service principal client ID | No* |
-| `ARM_CLIENT_SECRET` | Azure service principal secret | No* |
-| `ARM_TENANT_ID` | Azure tenant ID | No* |
+| Variable              | Description                       | Required |
+| --------------------- | --------------------------------- | -------- |
+| `ARM_SUBSCRIPTION_ID` | Azure subscription ID             | Yes      |
+| `ARM_CLIENT_ID`       | Azure service principal client ID | No\*     |
+| `ARM_CLIENT_SECRET`   | Azure service principal secret    | No\*     |
+| `ARM_TENANT_ID`       | Azure tenant ID                   | No\*     |
 
-*Required only when using service principal authentication instead of Azure CLI.
+\*Required only when using service principal authentication instead of Azure CLI.
 
 ## Testing
 
@@ -187,10 +192,12 @@ npm run test:coverage
 ### Common Issues
 
 1. **Provider configuration errors:**
+
    - Ensure you're logged in to Azure CLI: `az login`
    - Verify your subscription ID in `.env`
 
 2. **DNS propagation delays:**
+
    - CNAME records may take 5-60 minutes to propagate
    - Use `nslookup` or `dig` to verify DNS changes
 
@@ -205,4 +212,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Resources
 
 - [CDKTF Documentation](https://developer.hashicorp.com/terraform/cdktf)
--
+- [Terraform Azurerm Provider Docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
