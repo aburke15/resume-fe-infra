@@ -11,6 +11,10 @@ import { DnsCnameRecord } from "@cdktf/provider-azurerm/lib/dns-cname-record";
 import { DataAzurermDnsZone } from "@cdktf/provider-azurerm/lib/data-azurerm-dns-zone";
 import { CdnEndpointCustomDomain } from "@cdktf/provider-azurerm/lib/cdn-endpoint-custom-domain";
 import { StorageAccountStaticWebsiteA } from "@cdktf/provider-azurerm/lib/storage-account-static-website";
+import { NullProvider } from "../.gen/providers/null/provider";
+import { Resource as NullResource } from "../.gen/providers/null/resource";
+import * as fs from "fs";
+import * as crypto from "crypto";
 
 export class CloudResumeInfraStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -39,6 +43,30 @@ export class CloudResumeInfraStack extends TerraformStack {
       storageAccountId: storageAccount.id,
       indexDocument: "index.html",
       error404Document: "error.html",
+    });
+
+    const cdnProfile = new CdnProfile(this, "cloud-resume-cdn-profile", {
+      name: "cloud-resume-cdn-profile",
+      resourceGroupName: resourceGroup.name,
+      location: "global",
+      sku: "Standard_Microsoft",
+    });
+
+    const cdnEnpoint = new CdnEndpoint(this, "cloud-resume-cdn-endpoint", {
+      name: "cloud-resume-cdn-endpoint",
+      profileName: cdnProfile.name,
+      resourceGroupName: resourceGroup.name,
+      location: cdnProfile.location,
+      isHttpAllowed: false,
+      isHttpsAllowed: true,
+      originHostHeader: storageAccount.primaryWebHost,
+      origin: [
+        {
+          name: "StorageStaticWebsite",
+          hostName: storageAccount.primaryWebHost,
+          httpsPort: 443,
+        },
+      ],
     });
 
     const containerName: string = "$web";
@@ -70,37 +98,13 @@ export class CloudResumeInfraStack extends TerraformStack {
       source: Paths.stylesCssPath,
     });
 
-    new StorageBlob(this, "main-js-blob", {
-      name: "main.js",
+    new StorageBlob(this, "resume-js-blob", {
+      name: "resume.js",
       storageAccountName: storageAccount.name,
       storageContainerName: containerName,
       type: "Block",
       contentType: "application/javascript",
-      source: Paths.mainJsPath,
-    });
-
-    const cdnProfile = new CdnProfile(this, "cloud-resume-cdn-profile", {
-      name: "cloud-resume-cdn-profile",
-      resourceGroupName: resourceGroup.name,
-      location: "global",
-      sku: "Standard_Microsoft",
-    });
-
-    const cdnEnpoint = new CdnEndpoint(this, "cloud-resume-cdn-endpoint", {
-      name: "cloud-resume-cdn-endpoint",
-      profileName: cdnProfile.name,
-      resourceGroupName: resourceGroup.name,
-      location: cdnProfile.location,
-      isHttpAllowed: false,
-      isHttpsAllowed: true,
-      originHostHeader: storageAccount.primaryWebHost,
-      origin: [
-        {
-          name: "StorageStaticWebsite",
-          hostName: storageAccount.primaryWebHost,
-          httpsPort: 443,
-        },
-      ],
+      source: Paths.resumeJsPath,
     });
 
     const dnsZone = new DataAzurermDnsZone(this, "existing-dns-zone", {
@@ -117,7 +121,7 @@ export class CloudResumeInfraStack extends TerraformStack {
       targetResourceId: cdnEnpoint.id,
     });
 
-    new CdnEndpointCustomDomain(this, "cloud-resume-cdn-custom-domain", {
+    const cdnCustomDomain = new CdnEndpointCustomDomain(this, "cloud-resume-cdn-custom-domain", {
       name: "res-aburke-tech",
       cdnEndpointId: cdnEnpoint.id,
       hostName: `${cname.name}.${dnsZone.name}`,
@@ -126,6 +130,33 @@ export class CloudResumeInfraStack extends TerraformStack {
         tlsVersion: "TLS12",
         protocolType: "ServerNameIndication",
       },
+    });
+
+    const hashFile = (p: string) => crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
+
+    const triggers = {
+      index: hashFile(Paths.indexHtmlPath),
+      error: hashFile(Paths.errorHtmlPath),
+      styles: hashFile(Paths.stylesCssPath),
+      main: hashFile(Paths.resumeJsPath),
+    };
+
+    new NullProvider(this, "null");
+    new NullResource(this, "cdn-purge", {
+      triggers,
+      provisioners: [
+        {
+          type: "local-exec",
+          command: [
+            "az cdn endpoint purge",
+            `--resource-group ${resourceGroup.name}`,
+            `--profile-name ${cdnProfile.name}`,
+            `--name ${cdnEnpoint.name}`,
+            "--content-paths '/*'",
+          ].join(" "),
+        },
+      ],
+      dependsOn: [cdnCustomDomain],
     });
   }
 }

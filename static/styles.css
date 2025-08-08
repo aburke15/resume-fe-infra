@@ -1,0 +1,104 @@
+body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    line-height: 1.5;
+    color: #000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+h6 {
+  font-style: italic;
+}
+
+ul {
+  list-style: circle;
+}
+
+.double-line-break {
+    position: relative;
+    height: 6px; /* Total height for both lines + spacing */
+    width: 100%;
+}
+
+.double-line-break::before,
+.double-line-break::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: black;
+    position: absolute;
+    left: 0;
+}
+
+.double-line-break::before {
+    top: 0;
+}
+
+.double-line-break::after {
+    top: 4px; /* Space between lines */
+}
+
+a {
+    color: black;
+    text-decoration: none; /* Removes underline, optional */
+}
+
+a:hover {
+    color: gray;
+    text-decoration: none; /* Keeps underline removed on hover */
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: gray;
+}
+
+/* Error Page Styles */
+.error-page {
+    background: #f8f8f8;
+    color: #333;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.error-container {
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    padding: 40px 30px;
+}
+
+.error-page h1 {
+    font-size: 4em;
+    margin: 0 0 10px 0;
+    color: #e74c3c;
+}
+
+.error-page h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.5em;
+}
+
+.error-page p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.error-page a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.error-page a:hover {
+    text-decoration: underline;
+}

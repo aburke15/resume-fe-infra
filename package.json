@@ -1,5 +1,5 @@
 {
-  "name": "resume-infra",
+  "name": "resume-fe-infra",
   "version": "1.0.0",
   "main": "main.js",
   "types": "main.ts",
@@ -22,8 +22,7 @@
   "dependencies": {
     "@cdktf/provider-azurerm": "14.7.1",
     "cdktf": "^0.21.0",
-    "constructs": "^10.4.2",
-    "dotenv": "^17.2.1"
+    "constructs": "^10.4.2"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
