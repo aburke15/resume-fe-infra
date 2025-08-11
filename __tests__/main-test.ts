@@ -1,89 +1,48 @@
 // Copyright (c) HashiCorp, Inc
 // SPDX-License-Identifier: MPL-2.0
 import "cdktf/lib/testing/adapters/jest"; // Load types for expect matchers
-// import { Testing } from "cdktf";
+import { Testing } from "cdktf";
+import { CloudResumeInfraStack } from "../src/cloud-resume-infra-stack";
 
-describe("My CDKTF Application", () => {
+describe("CloudResumeInfraStack", () => {
   // The tests below are example tests, you can find more information at
   // https://cdk.tf/testing
-  it.todo("should be tested");
 
-  // // All Unit tests test the synthesised terraform code, it does not create real-world resources
-  // describe("Unit testing using assertions", () => {
-  //   it("should contain a resource", () => {
-  //     // import { Image,Container } from "./.gen/providers/docker"
-  //     expect(
-  //       Testing.synthScope((scope) => {
-  //         new MyApplicationsAbstraction(scope, "my-app", {});
-  //       })
-  //     ).toHaveResource(Container);
+  describe("Basic Infrastructure Tests", () => {
+    it("should create a valid stack", () => {
+      const app = Testing.app();
+      const stack = new CloudResumeInfraStack(app, "test");
+      expect(stack).toBeDefined();
+    });
 
-  //     expect(
-  //       Testing.synthScope((scope) => {
-  //         new MyApplicationsAbstraction(scope, "my-app", {});
-  //       })
-  //     ).toHaveResourceWithProperties(Image, { name: "ubuntu:latest" });
-  //   });
-  // });
+    it("should synthesize without errors", () => {
+      const app = Testing.app();
+      const stack = new CloudResumeInfraStack(app, "test");
+      expect(() => Testing.synth(stack)).not.toThrow();
+    });
+  });
 
-  // describe("Unit testing using snapshots", () => {
-  //   it("Tests the snapshot", () => {
-  //     const app = Testing.app();
-  //     const stack = new TerraformStack(app, "test");
+  describe("Stack Properties", () => {
+    it("should have correct stack name", () => {
+      const app = Testing.app();
+      const stack = new CloudResumeInfraStack(app, "test");
+      expect(stack.node.id).toBe("test");
+    });
 
-  //     new TestProvider(stack, "provider", {
-  //       accessKey: "1",
-  //     });
+    it("should be instance of CloudResumeInfraStack", () => {
+      const app = Testing.app();
+      const stack = new CloudResumeInfraStack(app, "test");
+      expect(stack).toBeInstanceOf(CloudResumeInfraStack);
+    });
+  });
 
-  //     new TestResource(stack, "test", {
-  //       name: "my-resource",
-  //     });
-
-  //     expect(Testing.synth(stack)).toMatchSnapshot();
-  //   });
-
-  //   it("Tests a combination of resources", () => {
-  //     expect(
-  //       Testing.synthScope((stack) => {
-  //         new TestDataSource(stack, "test-data-source", {
-  //           name: "foo",
-  //         });
-
-  //         new TestResource(stack, "test-resource", {
-  //           name: "bar",
-  //         });
-  //       })
-  //     ).toMatchInlineSnapshot();
-  //   });
-  // });
-
-  // describe("Checking validity", () => {
-  //   it("check if the produced terraform configuration is valid", () => {
-  //     const app = Testing.app();
-  //     const stack = new TerraformStack(app, "test");
-
-  //     new TestDataSource(stack, "test-data-source", {
-  //       name: "foo",
-  //     });
-
-  //     new TestResource(stack, "test-resource", {
-  //       name: "bar",
-  //     });
-  //     expect(Testing.fullSynth(app)).toBeValidTerraform();
-  //   });
-
-  //   it("check if this can be planned", () => {
-  //     const app = Testing.app();
-  //     const stack = new TerraformStack(app, "test");
-
-  //     new TestDataSource(stack, "test-data-source", {
-  //       name: "foo",
-  //     });
-
-  //     new TestResource(stack, "test-resource", {
-  //       name: "bar",
-  //     });
-  //     expect(Testing.fullSynth(app)).toPlanSuccessfully();
-  //   });
-  // });
+  describe("Terraform Generation", () => {
+    it("should generate Terraform configuration", () => {
+      const app = Testing.app();
+      const stack = new CloudResumeInfraStack(app, "test");
+      const terraformConfig = Testing.synth(stack);
+      expect(terraformConfig).toBeDefined();
+      expect(typeof terraformConfig).toBe("string");
+    });
+  });
 });
