@@ -52,7 +52,7 @@ The current test suite covers:
 
 ```
 __tests__/
-└── main-test.ts          # Main test file for CloudResumeInfraStack
+└── main.test.ts          # Main test file for CloudResumeInfraStack
 ```
 
 ## 🚀 What the Tests Validate

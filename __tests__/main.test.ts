@@ -1,13 +1,8 @@
-// Copyright (c) HashiCorp, Inc
-// SPDX-License-Identifier: MPL-2.0
 import "cdktf/lib/testing/adapters/jest"; // Load types for expect matchers
 import { Testing } from "cdktf";
 import { CloudResumeInfraStack } from "../src/cloud-resume-infra-stack";
 
 describe("CloudResumeInfraStack", () => {
-  // The tests below are example tests, you can find more information at
-  // https://cdk.tf/testing
-
   describe("Basic Infrastructure Tests", () => {
     it("should create a valid stack", () => {
       const app = Testing.app();
